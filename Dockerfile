@@ -1,4 +1,4 @@
-FROM node:20-buster-slim
+FROM node:20-bookworm-slim
 
 LABEL version="1.0.3"
 LABEL repository="https://github.com/sma11black/hexo-action"
@@ -9,8 +9,10 @@ USER root
 COPY entrypoint.sh /entrypoint.sh
 COPY sync_deploy_history.js /sync_deploy_history.js
 
-RUN apt-get update > /dev/null && \
-    apt-get install -y git openssh-client > /dev/null ; \
+RUN apt-get update && \
+    apt-get install -y git openssh-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
